@@ -62,8 +62,13 @@ export function calculateShippingCost(
     weightKg - rate.includedWeightKg,
   );
 
-  const billableWeightKg =
-    Math.ceil(additionalWeightKg);
+ const precisionTolerance =
+  Number.EPSILON * Math.max(1, Math.abs(additionalWeightKg));
+
+const billableWeightKg =
+  additionalWeightKg === 0
+    ? 0
+    : Math.ceil(additionalWeightKg - precisionTolerance);
 
   const baseChargeInMinorUnits = Math.round(
     rate.baseCharge * MINOR_CURRENCY_UNITS,
